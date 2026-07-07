@@ -100,7 +100,3 @@ jupyter notebook Proyecto_2P_Riesgo_Inundacion.ipynb
 - Leyenda y resumen estadistico
 - Formulario de prediccion personalizada
 - Busqueda y listado de parroquias
-
-## Licencia
-
-Proyecto academico - Universidad de las Fuerzas Armadas ESPE
