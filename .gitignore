@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+Mendeley_*
+maate_*
+mag_*
+sngre_*.csv
+export-full-*/
+*.png
+Proyecto_2P.md
+verify_notebook.py
+generar_*.py
+resultados_modelos.csv
+explorar_sngre.py
+generar_flask_data.py

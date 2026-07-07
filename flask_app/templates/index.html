@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riesgo de Inundacion - Esmeraldas</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --alto: #dc2626;
+            --alto-bg: #fef2f2;
+            --medio: #f59e0b;
+            --medio-bg: #fffbeb;
+            --bajo: #16a34a;
+            --bajo-bg: #f0fdf4;
+            --primary: #1e3a5f;
+            --primary-light: #3b82f6;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -2px rgba(0,0,0,.04);
+            --radius: 10px;
+            --radius-sm: 6px;
+            --transition: .2s ease;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg); color: var(--text);
+            overflow: hidden; height: 100vh;
+        }
+
+        #app { display: flex; flex-direction: column; height: 100vh; }
+
+        /* HEADER */
+        #header {
+            background: var(--primary);
+            color: white; padding: 0 24px;
+            display: flex; align-items: center;
+            height: 56px; flex-shrink: 0;
+            gap: 16px; z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        }
+        #header .logo {
+            width: 32px; height: 32px;
+            background: rgba(255,255,255,.15);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 800;
+        }
+        #header h1 { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
+        #header .sub { font-size: 12px; opacity: .7; margin-left: auto; display: none; }
+        #header .badge {
+            font-size: 10px; background: rgba(255,255,255,.15);
+            padding: 3px 10px; border-radius: 20px;
+            margin-left: auto; white-space: nowrap;
+        }
+        @media (min-width: 768px) { #header .sub { display: block; } }
+
+        /* MAIN LAYOUT */
+        #main { display: flex; flex: 1; min-height: 0; }
+
+        /* MAP */
+        #map { flex: 1; min-height: 0; }
+        .leaflet-popup-content-wrapper { border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+        .leaflet-popup-content { margin: 12px 16px; min-width: 200px; }
+        .leaflet-popup-content .popup-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+        .leaflet-popup-content .popup-sub { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+        .leaflet-popup-content .popup-risk { font-size: 18px; font-weight: 700; margin: 4px 0; }
+        .leaflet-tooltip {
+            background: var(--primary); color: white;
+            border: none; border-radius: var(--radius-sm);
+            padding: 6px 12px; font-size: 12px;
+            font-family: 'Inter', sans-serif;
+        }
+        .leaflet-tooltip-top:before { border-top-color: var(--primary); }
+
+        /* SIDEBAR */
+        #sidebar {
+            width: 380px; background: var(--card);
+            display: flex; flex-direction: column;
+            box-shadow: -2px 0 12px rgba(0,0,0,.06);
+            flex-shrink: 0; min-height: 0;
+        }
+        .sidebar-tabs {
+            display: flex; border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .sidebar-tab {
+            flex: 1; padding: 12px; text-align: center;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            color: var(--muted); transition: var(--transition);
+            border-bottom: 2px solid transparent;
+            user-select: none;
+        }
+        .sidebar-tab:hover { color: var(--text); background: var(--bg); }
+        .sidebar-tab.active { color: var(--primary-light); border-bottom-color: var(--primary-light); }
+        .sidebar-tab .tab-icon { display: block; font-size: 16px; margin-bottom: 2px; }
+        .sidebar-content { flex: 1; overflow-y: auto; padding: 16px; }
+
+        /* LEGEND + STATS */
+        #legend-stats { display: flex; gap: 8px; margin-bottom: 14px; }
+        .legend-item {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; padding: 10px 6px;
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: var(--transition); border: 1px solid transparent;
+            font-size: 11px; font-weight: 500; color: var(--muted);
+        }
+        .legend-item:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+        .legend-item .dot { width: 10px; height: 10px; border-radius: 50%; margin-bottom: 4px; }
+        .legend-item .count { font-size: 22px; font-weight: 700; color: var(--text); }
+        .legend-item.active { border-color: currentColor; background: var(--bg); }
+
+        /* SEARCH */
+        #search {
+            width: 100%; height: 38px; padding: 0 12px 0 36px;
+            border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+            font-size: 13px; font-family: inherit;
+            transition: var(--transition);
+            background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 12px center no-repeat;
+        }
+        #search:focus { outline: none; border-color: var(--primary-light); background-color: white; }
+
+        /* PARISH LIST */
+        .parroquia-card {
+            display: flex; align-items: center;
+            padding: 10px 12px; margin-bottom: 4px;
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: var(--transition);
+            border-left: 3px solid var(--border);
+            background: var(--card);
+        }
+        .parroquia-card:hover { background: var(--bg); transform: translateX(2px); }
+        .parroquia-card .info { flex: 1; min-width: 0; }
+        .parroquia-card .info .nombre { font-weight: 600; font-size: 13px; }
+        .parroquia-card .info .canton { font-size: 11px; color: var(--muted); }
+        .parroquia-card .riesgo-badge {
+            font-size: 11px; font-weight: 600; padding: 2px 10px;
+            border-radius: 20px; flex-shrink: 0;
+        }
+
+        /* INFO PANEL */
+        #info-panel {
+            margin: 12px 0; padding: 14px; display: none;
+            border-radius: var(--radius); border: 1px solid var(--border);
+            animation: fadeSlideIn .25s ease;
+        }
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+        #info-panel .panel-title { font-weight: 700; font-size: 15px; }
+        #info-panel .panel-sub { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+        #info-panel .panel-risk { font-size: 20px; font-weight: 700; margin: 4px 0; }
+
+        /* PROBABILITY BAR */
+        .proba-bar {
+            display: flex; height: 10px; border-radius: 20px;
+            overflow: hidden; margin: 8px 0; gap: 2px;
+        }
+        .proba-bar .seg {
+            transition: width .4s ease; border-radius: 20px;
+        }
+        .proba-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+        .proba-labels span { display: flex; align-items: center; gap: 3px; }
+        .proba-labels .ldot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+
+        /* PREDICTION FORM */
+        .pred-section { margin: 12px 0; }
+        .pred-section h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+        .pred-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .pred-field { position: relative; }
+        .pred-field label {
+            display: block; font-size: 10px; font-weight: 600; color: var(--muted);
+            margin-bottom: 2px; text-transform: uppercase; letter-spacing: .3px;
+        }
+        .pred-field input {
+            width: 100%; height: 34px; padding: 0 8px;
+            border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+            font-size: 12px; font-family: inherit;
+            transition: var(--transition); background: var(--bg);
+        }
+        .pred-field input:focus { outline: none; border-color: var(--primary-light); background: white; }
+        .pred-field .unit {
+            position: absolute; right: 8px; bottom: 8px;
+            font-size: 9px; color: var(--muted); font-weight: 500;
+        }
+        .pred-buttons { display: flex; gap: 6px; margin: 8px 0; }
+        .pred-buttons button {
+            flex: 1; height: 34px; border: none; border-radius: var(--radius-sm);
+            font-size: 11px; font-weight: 600; cursor: pointer;
+            transition: var(--transition); font-family: inherit;
+        }
+        .btn-predict {
+            background: var(--primary); color: white;
+        }
+        .btn-predict:hover { background: var(--primary-light); }
+        .btn-preset {
+            background: var(--bg); color: var(--muted); border: 1px solid var(--border) !important;
+        }
+        .btn-preset:hover { background: var(--border); color: var(--text); }
+
+        #pred-result {
+            display: none; margin-top: 8px; padding: 14px;
+            border-radius: var(--radius); text-align: center;
+            animation: fadeSlideIn .3s ease;
+        }
+        #pred-result .pred-label { font-size: 11px; opacity: .7; margin-bottom: 2px; }
+        #pred-result .pred-value { font-size: 24px; font-weight: 800; }
+        #pred-result .pred-probas { font-size: 11px; margin-top: 6px; display: flex; justify-content: center; gap: 12px; }
+
+        /* TOAST */
+        #toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white;
+            padding: 10px 20px; border-radius: var(--radius);
+            font-size: 13px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity .3s ease, transform .3s ease;
+            transform: translateX(-50%) translateY(20px);
+            pointer-events: none; z-index: 9999;
+        }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* LOADING */
+        #loading {
+            position: fixed; inset: 0; background: var(--bg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10000; transition: opacity .4s ease;
+        }
+        #loading.hidden { opacity: 0; pointer-events: none; }
+        #loading .spinner {
+            width: 36px; height: 36px; border: 3px solid var(--border);
+            border-top-color: var(--primary-light); border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #loading p { margin-top: 12px; font-size: 13px; color: var(--muted); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            #main { flex-direction: column; }
+            #sidebar { width: 100%; height: 45vh; }
+            .pred-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            #sidebar { height: 50vh; }
+            #header h1 { font-size: 14px; }
+            .pred-grid { grid-template-columns: 1fr; }
+            #legend-stats { flex-wrap: wrap; }
+            .legend-item { min-width: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading">
+    <div class="spinner"></div>
+    <p>Cargando mapa de riesgo...</p>
+</div>
+
+<div id="toast"></div>
+
+<div id="app">
+    <header id="header">
+        <div class="logo">&#x26A0;</div>
+        <h1>Riesgo de Inundaci&oacute;n</h1>
+        <span class="sub">Provincia de Esmeraldas &middot; Random Forest &middot; SNGRE</span>
+        <span class="badge">v2.0 &middot; 64 parroquias</span>
+    </header>
+
+    <div id="main">
+        <div id="map"></div>
+
+        <aside id="sidebar">
+            <div class="sidebar-tabs">
+                <div class="sidebar-tab active" data-tab="mapa" onclick="switchTab('mapa')">
+                    <span class="tab-icon">&#x1F5FA;</span> Mapa
+                </div>
+                <div class="sidebar-tab" data-tab="predecir" onclick="switchTab('predecir')">
+                    <span class="tab-icon">&#x1F52E;</span> Predecir
+                </div>
+                <div class="sidebar-tab" data-tab="listado" onclick="switchTab('listado')">
+                    <span class="tab-icon">&#x1F4CB;</span> Listado
+                </div>
+            </div>
+
+            <!-- TAB: MAPA -->
+            <div class="sidebar-content" id="tab-mapa">
+                <div id="legend-stats"></div>
+                <input type="text" id="search" placeholder="Buscar parroquia o cant&oacute;n..." oninput="filterParroquias()">
+                <div id="info-panel"></div>
+                <div id="parroquias-list"></div>
+            </div>
+
+            <!-- TAB: PREDECIR -->
+            <div class="sidebar-content" id="tab-predecir" style="display:none">
+                <div class="pred-section">
+                    <h3>Variables predictoras</h3>
+                    <div class="pred-grid">
+                        <div class="pred-field">
+                            <label>Precipitaci&oacute;n anual</label>
+                            <input type="number" id="input-precip" placeholder="2200" step="10">
+                            <span class="unit">mm</span>
+                        </div>
+                        <div class="pred-field">
+                            <label>Altitud media</label>
+                            <input type="number" id="input-alt" placeholder="15" step="0.5">
+                            <span class="unit">m</span>
+                        </div>
+                        <div class="pred-field">
+                            <label>Pendiente</label>
+                            <input type="number" id="input-pend" placeholder="3" step="0.1">
+                            <span class="unit">%</span>
+                        </div>
+                        <div class="pred-field">
+                            <label>Distancia a agua</label>
+                            <input type="number" id="input-dist" placeholder="1.0" step="0.1">
+                            <span class="unit">km</span>
+                        </div>
+                        <div class="pred-field">
+                            <label>Densidad poblacional</label>
+                            <input type="number" id="input-dens" placeholder="50" step="5">
+                            <span class="unit">hab/km&sup2;</span>
+                        </div>
+                        <div class="pred-field">
+                            <label>&Aacute;rea urbanizada</label>
+                            <input type="number" id="input-urb" placeholder="5" step="0.5">
+                            <span class="unit">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pred-buttons">
+                    <button class="btn-preset" onclick="setPreset('rural')">Rural</button>
+                    <button class="btn-preset" onclick="setPreset('urbano')">Urbano</button>
+                    <button class="btn-preset" onclick="setPreset('costero')">Costero</button>
+                    <button class="btn-predict" onclick="predictCustom()">Predecir</button>
+                </div>
+                <div id="pred-result"></div>
+            </div>
+
+            <!-- TAB: LISTADO -->
+            <div class="sidebar-content" id="tab-listado" style="display:none">
+                <input type="text" id="search-list" placeholder="Buscar..." oninput="filterParroquiasList()">
+                <div style="margin-top:8px">
+                    <select id="filter-riesgo" onchange="filterParroquiasList()" style="width:100%;height:34px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;padding:0 8px;background:var(--bg)">
+                        <option value="">Todos los niveles</option>
+                        <option value="Alto">Alto Riesgo</option>
+                        <option value="Medio">Medio Riesgo</option>
+                        <option value="Bajo">Bajo Riesgo</option>
+                    </select>
+                </div>
+                <div id="parroquias-list-full" style="margin-top:8px"></div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<script>
+var map = L.map('map', {zoomControl: false}).setView([0.8, -79.5], 8);
+L.control.zoom({position: 'bottomleft'}).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 16
+}).addTo(map);
+
+var geojsonLayer = null;
+var parroquiasList = [];
+var parroquiasFull = [];
+var allStats = {Alto: 0, Medio: 0, Bajo: 0};
+
+/* TAB SWITCHING */
+function switchTab(tab) {
+    document.querySelectorAll('.sidebar-content').forEach(function(el) { el.style.display = 'none'; });
+    document.getElementById('tab-' + tab).style.display = 'block';
+    document.querySelectorAll('.sidebar-tab').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelector('.sidebar-tab[data-tab="' + tab + '"]').classList.add('active');
+    if (tab === 'listado') renderFullList();
+}
+
+/* TOAST */
+function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+/* MAP STYLE */
+function styleFeature(f) {
+    return {
+        fillColor: f.properties.color || '#94a3b8',
+        weight: 1.2, opacity: 1, color: '#fff', fillOpacity: 0.7
+    };
+}
+
+function highlightFeature(e) {
+    var layer = e.target;
+    layer.setStyle({weight: 3, color: '#1e293b', fillOpacity: 0.85});
+    layer.bringToFront();
+    showInfoPanel(layer.feature);
+}
+
+function resetHighlight(e) { geojsonLayer.resetStyle(e.target); }
+
+function zoomToFeature(e) {
+    map.fitBounds(e.target.getBounds(), {padding: [40, 40]});
+    e.target.openPopup();
+}
+
+/* POPUP HTML */
+function popupHTML(props) {
+    var pa = (props.proba_alto * 100).toFixed(1);
+    var pm = (props.proba_medio * 100).toFixed(1);
+    var pb = (props.proba_bajo * 100).toFixed(1);
+    return '<div class="popup-title">' + props.PARROQUIA + '</div>' +
+        '<div class="popup-sub">' + props.CANTON + ' &middot; ' + props.PROVINCIA + '</div>' +
+        '<div class="popup-risk" style="color:' + props.color + '">' + props.riesgo + '</div>' +
+        '<div class="proba-bar"><div class="seg" style="width:' + pa + '%;background:var(--alto)"></div><div class="seg" style="width:' + pm + '%;background:var(--medio)"></div><div class="seg" style="width:' + pb + '%;background:var(--bajo)"></div></div>' +
+        '<div class="proba-labels"><span><span class="ldot" style="background:var(--alto)"></span> Alto ' + pa + '%</span><span><span class="ldot" style="background:var(--medio)"></span> Med ' + pm + '%</span><span><span class="ldot" style="background:var(--bajo)"></span> Bajo ' + pb + '%</span></div>';
+}
+
+function onEachFeature(feature, layer) {
+    var p = feature.properties;
+    layer.bindTooltip(
+        '<b>' + p.PARROQUIA + '</b> &middot; ' + p.CANTON,
+        {sticky: true, direction: 'top', offset: [0, -4]}
+    );
+    layer.bindPopup(popupHTML(p), {maxWidth: 260});
+    layer.on({mouseover: highlightFeature, mouseout: resetHighlight, click: zoomToFeature});
+    parroquiasList.push({nombre: p.PARROQUIA, canton: p.CANTON, riesgo: p.riesgo, color: p.color, layer: layer, props: p});
+    parroquiasFull.push({nombre: p.PARROQUIA, canton: p.CANTON, riesgo: p.riesgo, color: p.color, props: p});
+}
+
+/* INFO PANEL */
+function showInfoPanel(feature) {
+    var p = feature.properties;
+    var panel = document.getElementById('info-panel');
+    var pa = (p.proba_alto * 100).toFixed(1);
+    var pm = (p.proba_medio * 100).toFixed(1);
+    var pb = (p.proba_bajo * 100).toFixed(1);
+    panel.style.display = 'block';
+    panel.innerHTML =
+        '<div class="panel-title">' + p.PARROQUIA + '</div>' +
+        '<div class="panel-sub">' + p.CANTON + ' &middot; ' + p.PROVINCIA + '</div>' +
+        '<div class="panel-risk" style="color:' + p.color + '">' + p.riesgo + '</div>' +
+        '<div class="proba-bar"><div class="seg" style="width:' + pa + '%;background:var(--alto)"></div><div class="seg" style="width:' + pm + '%;background:var(--medio)"></div><div class="seg" style="width:' + pb + '%;background:var(--bajo)"></div></div>' +
+        '<div class="proba-labels"><span><span class="ldot" style="background:var(--alto)"></span> Alto ' + pa + '%</span><span><span class="ldot" style="background:var(--medio)"></span> Medio ' + pm + '%</span><span><span class="ldot" style="background:var(--bajo)"></span> Bajo ' + pb + '%</span></div>';
+}
+
+/* RENDER PARISH LIST */
+function renderParroquiasList(list) {
+    var html = '';
+    list.forEach(function(p) {
+        var bg = p.riesgo === 'Alto' ? 'var(--alto-bg)' : p.riesgo === 'Medio' ? 'var(--medio-bg)' : 'var(--bajo-bg)';
+        var txt = p.riesgo === 'Alto' ? 'var(--alto)' : p.riesgo === 'Medio' ? 'var(--medio)' : 'var(--bajo)';
+        html += '<div class="parroquia-card" style="border-left-color:' + p.color + '" onclick="focusParroquia(\'' + p.nombre.replace(/'/g, "\\'") + '\')">' +
+            '<div class="info"><div class="nombre">' + p.nombre + '</div><div class="canton">' + p.canton + '</div></div>' +
+            '<div class="riesgo-badge" style="background:' + bg + ';color:' + txt + '">' + p.riesgo + '</div></div>';
+    });
+    document.getElementById('parroquias-list').innerHTML = html;
+}
+
+function renderFullList() {
+    filterParroquiasList();
+}
+
+function filterParroquias() {
+    var q = document.getElementById('search').value.toLowerCase();
+    var filtered = parroquiasList.filter(function(p) {
+        return p.nombre.toLowerCase().indexOf(q) > -1 || p.canton.toLowerCase().indexOf(q) > -1;
+    });
+    renderParroquiasList(filtered);
+}
+
+function filterParroquiasList() {
+    var q = (document.getElementById('search-list') || {value: ''}).value.toLowerCase();
+    var risk = (document.getElementById('filter-riesgo') || {value: ''}).value;
+    var filtered = parroquiasFull.filter(function(p) {
+        var match = p.nombre.toLowerCase().indexOf(q) > -1 || p.canton.toLowerCase().indexOf(q) > -1;
+        if (risk) match = match && p.riesgo === risk;
+        return match;
+    });
+    renderFullListTo(filtered);
+}
+
+function renderFullListTo(list) {
+    var html = '';
+    list.forEach(function(p) {
+        var bg = p.riesgo === 'Alto' ? 'var(--alto-bg)' : p.riesgo === 'Medio' ? 'var(--medio-bg)' : 'var(--bajo-bg)';
+        var txt = p.riesgo === 'Alto' ? 'var(--alto)' : p.riesgo === 'Medio' ? 'var(--medio)' : 'var(--bajo)';
+        html += '<div class="parroquia-card" style="border-left-color:' + p.color + '" onclick="focusParroquia(\'' + p.nombre.replace(/'/g, "\\'") + '\')">' +
+            '<div class="info"><div class="nombre">' + p.nombre + '</div><div class="canton">' + p.canton + '</div></div>' +
+            '<div class="riesgo-badge" style="background:' + bg + ';color:' + txt + '">' + p.riesgo + '</div></div>';
+    });
+    document.getElementById('parroquias-list-full').innerHTML = html || '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Sin resultados</div>';
+}
+
+function focusParroquia(nombre) {
+    switchTab('mapa');
+    var found = parroquiasList.find(function(p) { return p.nombre === nombre; });
+    if (found && found.layer) {
+        map.fitBounds(found.layer.getBounds(), {padding: [40, 40]});
+        found.layer.openPopup();
+        showInfoPanel(found.layer.feature);
+        document.getElementById('search').value = nombre;
+        renderParroquiasList(parroquiasList);
+    }
+}
+
+/* LEGEND */
+function renderLegend(stats) {
+    var items = [
+        {key: 'Alto', label: 'Alto Riesgo', color: 'var(--alto)', bg: 'var(--alto-bg)'},
+        {key: 'Medio', label: 'Riesgo Medio', color: 'var(--medio)', bg: 'var(--medio-bg)'},
+        {key: 'Bajo', label: 'Bajo Riesgo', color: 'var(--bajo)', bg: 'var(--bajo-bg)'},
+    ];
+    var html = '';
+    items.forEach(function(item) {
+        html += '<div class="legend-item" style="background:' + item.bg + '" onclick="filterByRisk(\'' + item.key + '\')">' +
+            '<div class="dot" style="background:' + item.color + '"></div>' +
+            '<div class="count">' + (stats[item.key] || 0) + '</div>' +
+            '<div>' + item.label + '</div></div>';
+    });
+    document.getElementById('legend-stats').innerHTML = html;
+}
+
+function filterByRisk(risk) {
+    document.getElementById('search').value = '';
+    var filtered = parroquiasList.filter(function(p) { return p.riesgo === risk; });
+    renderParroquiasList(filtered);
+    showToast('Mostrando ' + filtered.length + ' parroquias con riesgo ' + risk);
+}
+
+/* PRESETS */
+function setPreset(type) {
+    var vals = {
+        rural: [2100, 25, 4.5, 2.0, 25, 2],
+        urbano: [2200, 12, 2.0, 0.5, 250, 35],
+        costero: [2400, 5, 1.0, 0.2, 80, 8]
+    };
+    var v = vals[type] || vals.rural;
+    document.getElementById('input-precip').value = v[0];
+    document.getElementById('input-alt').value = v[1];
+    document.getElementById('input-pend').value = v[2];
+    document.getElementById('input-dist').value = v[3];
+    document.getElementById('input-dens').value = v[4];
+    document.getElementById('input-urb').value = v[5];
+}
+
+/* PREDICT */
+function predictCustom() {
+    var data = {
+        precipitacion: parseFloat(document.getElementById('input-precip').value) || 0,
+        altitud: parseFloat(document.getElementById('input-alt').value) || 0,
+        pendiente: parseFloat(document.getElementById('input-pend').value) || 0,
+        distancia_agua: parseFloat(document.getElementById('input-dist').value) || 0,
+        densidad: parseFloat(document.getElementById('input-dens').value) || 0,
+        area_urbana: parseFloat(document.getElementById('input-urb').value) || 0
+    };
+
+    fetch('/api/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+        var el = document.getElementById('pred-result');
+        el.style.display = 'block';
+        el.style.background = res.color + '15';
+        el.style.border = '1px solid ' + res.color + '40';
+        el.innerHTML =
+            '<div class="pred-label">Riesgo estimado</div>' +
+            '<div class="pred-value" style="color:' + res.color + '">' + res.riesgo + '</div>' +
+            '<div class="pred-probas">' +
+            '<span style="color:var(--alto)">Alto ' + (res.proba_alto * 100).toFixed(1) + '%</span>' +
+            '<span style="color:var(--medio)">Medio ' + (res.proba_medio * 100).toFixed(1) + '%</span>' +
+            '<span style="color:var(--bajo)">Bajo ' + (res.proba_bajo * 100).toFixed(1) + '%</span>' +
+            '</div>';
+        switchTab('predecir');
+    });
+}
+
+/* INIT */
+fetch('/api/parroquias')
+    .then(function(r) { return r.json(); })
+    .then(function(geojson) {
+        geojsonLayer = L.geoJSON(geojson, {style: styleFeature, onEachFeature: onEachFeature}).addTo(map);
+        map.fitBounds(geojsonLayer.getBounds(), {padding: [20, 20]});
+
+        geojson.features.forEach(function(f) {
+            var r = f.properties.riesgo;
+            if (allStats[r] !== undefined) allStats[r]++;
+        });
+        renderLegend(allStats);
+        renderParroquiasList(parroquiasList);
+
+        document.getElementById('loading').classList.add('hidden');
+    })
+    .catch(function(e) {
+        document.getElementById('loading').innerHTML = '<p style="color:var(--alto)">Error al cargar datos: ' + e.message + '</p>';
+    });
+</script>
+</body>
+</html>

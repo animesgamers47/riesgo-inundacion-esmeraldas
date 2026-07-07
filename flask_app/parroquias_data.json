@@ -1,0 +1,884 @@
+[
+  {
+    "nombre": "5 De Junio",
+    "canton": "San Lorenzo",
+    "lat": 1.29,
+    "lng": -78.853333,
+    "features": [
+      2183.8,
+      26.9,
+      1.94,
+      1.54,
+      57.6,
+      4.2
+    ]
+  },
+  {
+    "nombre": "Alto Tambo",
+    "canton": "San Lorenzo",
+    "lat": 1.263333,
+    "lng": -78.853333,
+    "features": [
+      2150.5,
+      12.4,
+      3.05,
+      2.21,
+      67.6,
+      3.2
+    ]
+  },
+  {
+    "nombre": "Anchayacu",
+    "canton": "Eloy Alfaro",
+    "lat": 1.216667,
+    "lng": -79.053333,
+    "features": [
+      2187.9,
+      29.7,
+      3.25,
+      1.36,
+      51.3,
+      0.0
+    ]
+  },
+  {
+    "nombre": "Ancón",
+    "canton": "San Lorenzo",
+    "lat": 1.276667,
+    "lng": -78.866667,
+    "features": [
+      2123.8,
+      28.7,
+      3.61,
+      0.44,
+      66.0,
+      4.0
+    ]
+  },
+  {
+    "nombre": "Atacames",
+    "canton": "Atacames",
+    "lat": 0.883333,
+    "lng": -79.823333,
+    "features": [
+      2088.2,
+      11.8,
+      3.55,
+      1.63,
+      5.0,
+      9.2
+    ]
+  },
+  {
+    "nombre": "Atahualpa",
+    "canton": "Eloy Alfaro",
+    "lat": 1.183333,
+    "lng": -79.02,
+    "features": [
+      2167.3,
+      28.5,
+      3.0,
+      0.87,
+      38.6,
+      9.7
+    ]
+  },
+  {
+    "nombre": "Bolívar",
+    "canton": "Muisne",
+    "lat": 0.623333,
+    "lng": -79.993333,
+    "features": [
+      2368.0,
+      11.3,
+      0.59,
+      0.05,
+      64.0,
+      0.0
+    ]
+  },
+  {
+    "nombre": "Borbón",
+    "canton": "Eloy Alfaro",
+    "lat": 1.166667,
+    "lng": -79.02,
+    "features": [
+      2229.3,
+      19.6,
+      1.08,
+      0.05,
+      29.5,
+      4.3
+    ]
+  },
+  {
+    "nombre": "Calderón",
+    "canton": "San Lorenzo",
+    "lat": 1.303333,
+    "lng": -78.84,
+    "features": [
+      2262.3,
+      16.8,
+      1.13,
+      0.05,
+      53.7,
+      13.9
+    ]
+  },
+  {
+    "nombre": "Camarones",
+    "canton": "Esmeraldas",
+    "lat": 0.95,
+    "lng": -79.64,
+    "features": [
+      2234.9,
+      21.0,
+      3.61,
+      1.59,
+      5.1,
+      7.4
+    ]
+  },
+  {
+    "nombre": "Carondelet",
+    "canton": "San Lorenzo",
+    "lat": 1.263333,
+    "lng": -78.853333,
+    "features": [
+      2204.5,
+      24.7,
+      1.87,
+      1.52,
+      51.0,
+      9.0
+    ]
+  },
+  {
+    "nombre": "Chinca",
+    "canton": "Esmeraldas",
+    "lat": 0.95,
+    "lng": -79.66,
+    "features": [
+      2330.8,
+      18.9,
+      1.86,
+      1.37,
+      31.3,
+      0.8
+    ]
+  },
+  {
+    "nombre": "Chontaduro",
+    "canton": "Rioverde",
+    "lat": 0.766667,
+    "lng": -79.573333,
+    "features": [
+      2058.7,
+      11.6,
+      3.62,
+      1.7,
+      25.5,
+      8.4
+    ]
+  },
+  {
+    "nombre": "Chumundé",
+    "canton": "Rioverde",
+    "lat": 0.78,
+    "lng": -79.546667,
+    "features": [
+      2097.6,
+      12.0,
+      4.7,
+      1.83,
+      88.1,
+      8.7
+    ]
+  },
+  {
+    "nombre": "Chura",
+    "canton": "Quinindé",
+    "lat": 0.79,
+    "lng": -79.51,
+    "features": [
+      2225.2,
+      17.0,
+      2.39,
+      0.05,
+      94.5,
+      3.8
+    ]
+  },
+  {
+    "nombre": "Colón Eloy Del María",
+    "canton": "Eloy Alfaro",
+    "lat": 1.166667,
+    "lng": -79.003333,
+    "features": [
+      2027.9,
+      20.1,
+      3.86,
+      1.76,
+      70.2,
+      1.3
+    ]
+  },
+  {
+    "nombre": "Concepción",
+    "canton": "San Lorenzo",
+    "lat": 1.276667,
+    "lng": -78.813333,
+    "features": [
+      2268.1,
+      22.5,
+      2.51,
+      0.05,
+      64.0,
+      4.4
+    ]
+  },
+  {
+    "nombre": "Coronel Carlos Concha Torres",
+    "canton": "Esmeraldas",
+    "lat": 0.95,
+    "lng": -79.65,
+    "features": [
+      2346.5,
+      16.7,
+      4.55,
+      2.02,
+      67.7,
+      7.4
+    ]
+  },
+  {
+    "nombre": "Cube",
+    "canton": "Quinindé",
+    "lat": 0.8,
+    "lng": -79.48,
+    "features": [
+      2183.7,
+      22.6,
+      1.0,
+      0.05,
+      97.6,
+      6.4
+    ]
+  },
+  {
+    "nombre": "Daule",
+    "canton": "Muisne",
+    "lat": 0.596667,
+    "lng": -79.993333,
+    "features": [
+      2319.6,
+      6.5,
+      2.56,
+      0.05,
+      71.1,
+      5.3
+    ]
+  },
+  {
+    "nombre": "Esmeraldas",
+    "canton": "Esmeraldas",
+    "lat": 0.94,
+    "lng": -79.64,
+    "features": [
+      2094.3,
+      30.1,
+      3.3,
+      1.48,
+      52.5,
+      8.8
+    ]
+  },
+  {
+    "nombre": "Galera",
+    "canton": "Muisne",
+    "lat": 0.623333,
+    "lng": -80.02,
+    "features": [
+      2350.8,
+      4.2,
+      0.3,
+      0.05,
+      106.9,
+      12.0
+    ]
+  },
+  {
+    "nombre": "La Tola",
+    "canton": "Eloy Alfaro",
+    "lat": 1.166667,
+    "lng": -79.003333,
+    "features": [
+      2205.4,
+      23.9,
+      3.32,
+      1.59,
+      5.0,
+      12.2
+    ]
+  },
+  {
+    "nombre": "La Unión",
+    "canton": "Quinindé",
+    "lat": 0.81,
+    "lng": -79.52,
+    "features": [
+      2334.8,
+      14.9,
+      1.57,
+      0.61,
+      52.5,
+      9.7
+    ]
+  },
+  {
+    "nombre": "Lagarto",
+    "canton": "Rioverde",
+    "lat": 0.806667,
+    "lng": -79.586667,
+    "features": [
+      2001.1,
+      10.1,
+      2.64,
+      2.19,
+      7.0,
+      9.6
+    ]
+  },
+  {
+    "nombre": "Luis Vargas Torres",
+    "canton": "Eloy Alfaro",
+    "lat": 1.2,
+    "lng": -79.003333,
+    "features": [
+      2232.6,
+      14.2,
+      2.98,
+      0.77,
+      72.3,
+      3.9
+    ]
+  },
+  {
+    "nombre": "Majua",
+    "canton": "Esmeraldas",
+    "lat": 0.96,
+    "lng": -79.66,
+    "features": [
+      2141.1,
+      15.7,
+      1.2,
+      0.5,
+      32.5,
+      7.7
+    ]
+  },
+  {
+    "nombre": "Maldonado",
+    "canton": "Eloy Alfaro",
+    "lat": 1.233333,
+    "lng": -79.02,
+    "features": [
+      2069.9,
+      14.9,
+      2.38,
+      0.11,
+      101.2,
+      6.7
+    ]
+  },
+  {
+    "nombre": "Malimpia",
+    "canton": "Quinindé",
+    "lat": 0.81,
+    "lng": -79.51,
+    "features": [
+      2121.8,
+      22.0,
+      3.14,
+      0.61,
+      45.5,
+      0.0
+    ]
+  },
+  {
+    "nombre": "Mataje",
+    "canton": "San Lorenzo",
+    "lat": 1.29,
+    "lng": -78.813333,
+    "features": [
+      2233.5,
+      21.0,
+      4.97,
+      0.77,
+      27.6,
+      0.7
+    ]
+  },
+  {
+    "nombre": "Montalvo",
+    "canton": "Rioverde",
+    "lat": 0.753333,
+    "lng": -79.533333,
+    "features": [
+      2021.9,
+      20.8,
+      6.21,
+      1.04,
+      145.0,
+      0.0
+    ]
+  },
+  {
+    "nombre": "Muisne",
+    "canton": "Muisne",
+    "lat": 0.636667,
+    "lng": -79.993333,
+    "features": [
+      2453.0,
+      10.5,
+      3.32,
+      0.98,
+      13.8,
+      1.6
+    ]
+  },
+  {
+    "nombre": "Pampanal De Bolívar",
+    "canton": "Eloy Alfaro",
+    "lat": 1.233333,
+    "lng": -79.003333,
+    "features": [
+      2177.8,
+      14.3,
+      3.19,
+      0.17,
+      5.0,
+      0.9
+    ]
+  },
+  {
+    "nombre": "Quingue",
+    "canton": "Muisne",
+    "lat": 0.636667,
+    "lng": -80.006667,
+    "features": [
+      2232.1,
+      11.9,
+      0.3,
+      0.05,
+      100.6,
+      0.0
+    ]
+  },
+  {
+    "nombre": "Rioverde",
+    "canton": "Rioverde",
+    "lat": 0.806667,
+    "lng": -79.573333,
+    "features": [
+      2104.7,
+      24.0,
+      3.98,
+      0.66,
+      24.4,
+      0.0
+    ]
+  },
+  {
+    "nombre": "Rocafuerte",
+    "canton": "Rioverde",
+    "lat": 0.806667,
+    "lng": -79.533333,
+    "features": [
+      2316.5,
+      17.1,
+      4.27,
+      1.81,
+      69.5,
+      3.7
+    ]
+  },
+  {
+    "nombre": "Rosa Zárate",
+    "canton": "Quinindé",
+    "lat": 0.81,
+    "lng": -79.51,
+    "features": [
+      2151.3,
+      22.9,
+      2.55,
+      0.59,
+      78.1,
+      0.0
+    ]
+  },
+  {
+    "nombre": "San Francisco",
+    "canton": "Muisne",
+    "lat": 0.636667,
+    "lng": -80.033333,
+    "features": [
+      2424.8,
+      11.2,
+      3.46,
+      0.86,
+      5.8,
+      8.5
+    ]
+  },
+  {
+    "nombre": "San Francisco De Onzole",
+    "canton": "Eloy Alfaro",
+    "lat": 1.183333,
+    "lng": -78.986667,
+    "features": [
+      2168.6,
+      22.2,
+      5.2,
+      1.23,
+      116.0,
+      1.4
+    ]
+  },
+  {
+    "nombre": "San Gregorio",
+    "canton": "Muisne",
+    "lat": 0.583333,
+    "lng": -80.02,
+    "features": [
+      2274.0,
+      4.2,
+      1.52,
+      1.6,
+      61.1,
+      2.5
+    ]
+  },
+  {
+    "nombre": "San Javier De Cachaví",
+    "canton": "San Lorenzo",
+    "lat": 1.303333,
+    "lng": -78.853333,
+    "features": [
+      2382.0,
+      18.8,
+      2.39,
+      0.58,
+      114.3,
+      3.7
+    ]
+  },
+  {
+    "nombre": "San José De Cayapas",
+    "canton": "Eloy Alfaro",
+    "lat": 1.166667,
+    "lng": -78.986667,
+    "features": [
+      2268.1,
+      20.9,
+      2.01,
+      1.03,
+      43.9,
+      9.4
+    ]
+  },
+  {
+    "nombre": "San José De Chamanga",
+    "canton": "Muisne",
+    "lat": 0.61,
+    "lng": -80.046667,
+    "features": [
+      2308.7,
+      5.6,
+      1.82,
+      0.05,
+      25.5,
+      8.4
+    ]
+  },
+  {
+    "nombre": "San Lorenzo",
+    "canton": "San Lorenzo",
+    "lat": 1.276667,
+    "lng": -78.826667,
+    "features": [
+      2134.3,
+      19.8,
+      0.3,
+      0.05,
+      21.2,
+      5.8
+    ]
+  },
+  {
+    "nombre": "San Mateo",
+    "canton": "Esmeraldas",
+    "lat": 0.97,
+    "lng": -79.63,
+    "features": [
+      2075.2,
+      19.8,
+      2.83,
+      1.31,
+      92.4,
+      3.1
+    ]
+  },
+  {
+    "nombre": "Santa Lucía De Las Peñas",
+    "canton": "Eloy Alfaro",
+    "lat": 1.183333,
+    "lng": -78.986667,
+    "features": [
+      2056.8,
+      16.9,
+      1.29,
+      0.8,
+      76.8,
+      0.0
+    ]
+  },
+  {
+    "nombre": "Santa Rita",
+    "canton": "San Lorenzo",
+    "lat": 1.263333,
+    "lng": -78.84,
+    "features": [
+      2144.0,
+      17.8,
+      3.05,
+      2.17,
+      75.8,
+      1.5
+    ]
+  },
+  {
+    "nombre": "Santo Domingo De Onzole",
+    "canton": "Eloy Alfaro",
+    "lat": 1.166667,
+    "lng": -79.036667,
+    "features": [
+      1977.8,
+      14.5,
+      3.13,
+      1.77,
+      5.0,
+      6.0
+    ]
+  },
+  {
+    "nombre": "Selva Alegre",
+    "canton": "Eloy Alfaro",
+    "lat": 1.2,
+    "lng": -79.036667,
+    "features": [
+      2189.2,
+      18.2,
+      3.35,
+      1.93,
+      63.9,
+      6.7
+    ]
+  },
+  {
+    "nombre": "Sálima",
+    "canton": "Muisne",
+    "lat": 0.583333,
+    "lng": -80.046667,
+    "features": [
+      2438.0,
+      1.0,
+      0.38,
+      0.49,
+      5.0,
+      3.3
+    ]
+  },
+  {
+    "nombre": "Súa",
+    "canton": "Atacames",
+    "lat": 0.87,
+    "lng": -79.85,
+    "features": [
+      2068.0,
+      8.1,
+      3.32,
+      1.9,
+      95.7,
+      5.9
+    ]
+  },
+  {
+    "nombre": "Tabiazo",
+    "canton": "Esmeraldas",
+    "lat": 0.97,
+    "lng": -79.64,
+    "features": [
+      2293.2,
+      30.1,
+      1.61,
+      1.25,
+      22.5,
+      9.5
+    ]
+  },
+  {
+    "nombre": "Tachina",
+    "canton": "Esmeraldas",
+    "lat": 0.95,
+    "lng": -79.66,
+    "features": [
+      2249.7,
+      15.3,
+      5.11,
+      1.26,
+      25.2,
+      7.4
+    ]
+  },
+  {
+    "nombre": "Tambillo",
+    "canton": "San Lorenzo",
+    "lat": 1.263333,
+    "lng": -78.853333,
+    "features": [
+      2164.2,
+      24.7,
+      2.17,
+      0.36,
+      89.6,
+      1.2
+    ]
+  },
+  {
+    "nombre": "Telembí",
+    "canton": "Eloy Alfaro",
+    "lat": 1.166667,
+    "lng": -78.986667,
+    "features": [
+      2246.4,
+      13.5,
+      1.4,
+      1.37,
+      14.6,
+      4.3
+    ]
+  },
+  {
+    "nombre": "Timbiré",
+    "canton": "Eloy Alfaro",
+    "lat": 1.2,
+    "lng": -79.003333,
+    "features": [
+      2129.0,
+      19.2,
+      3.58,
+      1.35,
+      97.5,
+      0.5
+    ]
+  },
+  {
+    "nombre": "Tonchigüe",
+    "canton": "Atacames",
+    "lat": 0.87,
+    "lng": -79.863333,
+    "features": [
+      2068.3,
+      11.3,
+      2.3,
+      1.42,
+      39.0,
+      1.2
+    ]
+  },
+  {
+    "nombre": "Tonsupa",
+    "canton": "Atacames",
+    "lat": 0.843333,
+    "lng": -79.863333,
+    "features": [
+      2052.4,
+      12.1,
+      1.91,
+      1.39,
+      58.1,
+      7.0
+    ]
+  },
+  {
+    "nombre": "Tululbí",
+    "canton": "San Lorenzo",
+    "lat": 1.29,
+    "lng": -78.853333,
+    "features": [
+      2111.3,
+      21.9,
+      2.36,
+      1.45,
+      56.9,
+      10.7
+    ]
+  },
+  {
+    "nombre": "Urbina",
+    "canton": "San Lorenzo",
+    "lat": 1.303333,
+    "lng": -78.84,
+    "features": [
+      2140.9,
+      19.5,
+      3.59,
+      1.7,
+      14.3,
+      3.2
+    ]
+  },
+  {
+    "nombre": "Valdez",
+    "canton": "Eloy Alfaro",
+    "lat": 1.216667,
+    "lng": -79.036667,
+    "features": [
+      2240.9,
+      18.3,
+      2.87,
+      1.46,
+      11.3,
+      4.5
+    ]
+  },
+  {
+    "nombre": "Viche",
+    "canton": "Quinindé",
+    "lat": 0.82,
+    "lng": -79.5,
+    "features": [
+      2235.6,
+      23.0,
+      3.39,
+      0.42,
+      33.4,
+      7.7
+    ]
+  },
+  {
+    "nombre": "Vuelta Larga",
+    "canton": "Esmeraldas",
+    "lat": 0.95,
+    "lng": -79.66,
+    "features": [
+      2200.8,
+      16.2,
+      2.08,
+      0.91,
+      106.9,
+      12.0
+    ]
+  }
+]
