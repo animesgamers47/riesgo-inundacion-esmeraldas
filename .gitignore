@@ -22,3 +22,5 @@ Esmeraldas_CSV_Emigrantes.csv
 
 # Session / temp files
 session-*.md
+run_nb.py
+run_nb2.py
