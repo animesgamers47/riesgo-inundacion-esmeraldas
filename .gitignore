@@ -10,7 +10,15 @@ export-full-*/
 *.png
 Proyecto_2P.md
 verify_notebook.py
-generar_*.py
 resultados_modelos.csv
 explorar_sngre.py
 generar_flask_data.py
+
+# Raw INEC microdata (huge, not needed for deployment)
+Esmeraldas_CSV_Poblacion.csv
+Esmeraldas_CSV_Hogar.csv
+Esmeraldas_CSV_Vivienda.csv
+Esmeraldas_CSV_Emigrantes.csv
+
+# Session / temp files
+session-*.md

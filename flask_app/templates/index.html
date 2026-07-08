@@ -299,6 +299,12 @@
             <div class="sidebar-content" id="tab-predecir" style="display:none">
                 <div class="pred-section">
                     <h3>Variables predictoras</h3>
+                    <div class="pred-field" style="grid-column: 1 / -1;">
+                        <label>Parroquia (para datos censales)</label>
+                        <select id="input-parroquia" style="width:100%;height:34px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;padding:0 8px;background:var(--bg)">
+                            <option value="">-- Promedio general --</option>
+                        </select>
+                    </div>
                     <div class="pred-grid">
                         <div class="pred-field">
                             <label>Precipitaci&oacute;n anual</label>
@@ -549,8 +555,22 @@ function setPreset(type) {
     document.getElementById('input-urb').value = v[5];
 }
 
+/* LOAD PARISH LIST FOR DROPDOWN */
+fetch('/api/parroquias-list')
+    .then(function(r) { return r.json(); })
+    .then(function(list) {
+        var sel = document.getElementById('input-parroquia');
+        list.forEach(function(p) {
+            var opt = document.createElement('option');
+            opt.value = p.nombre;
+            opt.textContent = p.nombre + ' (' + p.canton + ')';
+            sel.appendChild(opt);
+        });
+    });
+
 /* PREDICT */
 function predictCustom() {
+    var parroquia = document.getElementById('input-parroquia').value;
     var data = {
         precipitacion: parseFloat(document.getElementById('input-precip').value) || 0,
         altitud: parseFloat(document.getElementById('input-alt').value) || 0,
@@ -559,6 +579,7 @@ function predictCustom() {
         densidad: parseFloat(document.getElementById('input-dens').value) || 0,
         area_urbana: parseFloat(document.getElementById('input-urb').value) || 0
     };
+    if (parroquia) data.parroquia = parroquia;
 
     fetch('/api/predict', {
         method: 'POST',

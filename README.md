@@ -1,55 +1,69 @@
 # Riesgo de Inundacion por Parroquia - Esmeraldas, Ecuador
 
 Clasificacion supervisada del nivel de riesgo de inundacion (Bajo/Medio/Alto) para las
-parroquias de la provincia de Esmeraldas, Ecuador, usando variables climaticas, geograficas
-y demograficas. App Flask desplegable en PythonAnywhere / Render / Railway.
+parroquias de la provincia de Esmeraldas, Ecuador, usando **19 variables**: 6 climaticas/
+geograficas originales + 13 del censo INEC 2022 y MAATE. App Flask con mapa Leaflet
+desplegable en PythonAnywhere / Render / Railway.
 
 ## Estructura del proyecto
 
 ```
-├── Proyecto_2P_Riesgo_Inundacion.ipynb          # Notebook principal (ejecutado)
-├── dataset_riesgo_inundacion_esmeraldas.csv      # Dataset integrado (320 registros)
-├── pipeline_riesgo_inundacion.py                 # Pipeline completo de ML
-├── extraer_datos_sngre.py                        # Extraccion de datos SNGRE REST API
-├── construir_dataset_integrado.py                # Integracion datos reales + sinteticos
-├── descargar_geojson_parroquias.py               # Descarga GeoJSON con poligonos
-├── modelo_riesgo_inundacion_rf_optimizado.pkl    # Modelo exportado (Pipeline)
-├── scaler.pkl / label_encoder.pkl                # Componentes auxiliares
-└── flask_app/                                    # App web (autocontenida para deploy)
-    ├── app.py                                    # API Flask
-    ├── requirements.txt                          # Dependencias
-    ├── Procfile                                  # Render / Railway
-    ├── runtime.txt                               # Version de Python
-    ├── wsgi.py                                   # PythonAnywhere
-    ├── templates/index.html                      # Mapa Leaflet interactivo
+├── Proyecto_2P_Riesgo_Inundacion.ipynb              # Notebook principal (19 features)
+├── dataset_riesgo_inundacion_enriquecido.csv        # Dataset enriquecido INEC+MAATE (320x46)
+├── pipeline_enriquecido.py                          # Pipeline con 19 features + comparativa
+├── integrar_nuevos_csvs.py                          # Agregacion INEC 2022 + MAATE por parroquia
+├── generar_notebook.py                              # Generador del notebook .ipynb
+├── extraer_datos_sngre.py                           # Extraccion de datos SNGRE REST API
+├── construir_dataset_integrado.py                   # Integracion datos reales + sinteticos
+├── descargar_geojson_parroquias.py                  # Descarga GeoJSON con poligonos
+├── modelo_riesgo_inundacion_rf_optimizado.pkl       # Modelo RF optimizado (19 features)
+├── label_encoder.pkl                                # Label encoder
+└── flask_app/                                       # App web (autocontenida para deploy)
+    ├── app.py                                       # API Flask (19 features + lookup INEC)
+    ├── requirements.txt                             # Dependencias
+    ├── Procfile                                     # Render / Railway
+    ├── runtime.txt                                  # Version de Python
+    ├── wsgi.py                                      # PythonAnywhere
+    ├── templates/index.html                         # Mapa Leaflet + selector parroquia
     ├── static/esmeraldas_parroquias_simple.geojson  # Poligonos parroquiales
-    └── models/                                   # Modelos + dataset (para deploy)
+    └── models/                                      # Modelos + dataset (para deploy)
         ├── modelo_riesgo_inundacion_rf_optimizado.pkl
-        ├── scaler.pkl
         ├── label_encoder.pkl
-        └── dataset_riesgo_inundacion_esmeraldas.csv
+        └── dataset_riesgo_inundacion_enriquecido.csv
 ```
 
 ## Datos
 
-- **Fuente principal**: SNGRE (Secretaria de Gestion de Riesgos Ecuador) - REST API
-  - Susceptibilidad a inundaciones por parroquia (ZONAS_SUSCEPTIBLES_INUNDACIONES)
-  - Eventos historicos de inundacion (COE2, 30 eventos)
-  - Limites parroquiales oficiales (64 parroquias)
-- **Variables predictoras**: Precipitacion, altitud, pendiente, distancia a cuerpos de agua,
+- **Fuente SNGRE**: Secretaria de Gestion de Riesgos Ecuador - REST API
+  - Susceptibilidad a inundaciones, eventos historicos, limites parroquiales (64 parroquias)
+- **Censo INEC 2022**: 4 tablas agregadas a nivel de parroquia
+  - Poblacion (534K registros): edad media, % menores 15, % mayores 65, % hombres
+  - Hogar (130K): % agua publica, % alcantarillado, % electricidad, hacinamiento
+  - Vivienda (159K): % pared/techo/piso bueno, personas por dormitorio
+  - Emigrantes (6.7K): total emigrantes
+- **MAATE**: Concesiones de agua (distancia al cuerpo de agua mas cercano)
+- **6 variables clasicas**: Precipitacion, altitud, pendiente, distancia a cuerpos de agua,
   densidad poblacional, area urbanizada
+- **13 variables INEC+MAATE**: Incorporadas para cumplir el uso de datos reales del censo
 - **Variable objetivo**: Riesgo de inundacion (Bajo/Medio/Alto) construido a partir de
   susceptibilidad real SNGRE + eventos historicos
 
 ## Modelos
 
+> Resultados con dataset enriquecido (19 features, 320 parroquias)
+
 | Modelo | Accuracy | F1-Score | CV F1 |
 |---|---|---|---|
-| Random Forest (opt) | 92.71% | 92.68% | 93.27% |
+| Random Forest (opt) | 92.71% | 92.68% | 92.81% |
 | Voting Soft | 92.71% | 92.68% | 93.21% |
 | Logistic Regression | 91.67% | 91.61% | 91.41% |
 | SVM (RBF) | 91.67% | 91.60% | 91.98% |
 | Decision Tree | 88.54% | 88.56% | 84.40% |
+
+Top-3 variables mas importantes:
+1. DISTANCIA_AGUA_KM (32.1%)
+2. PRECIPITACION_ANUAL_MM (16.3%)
+3. DENSIDAD_POBLACIONAL (8.7%)
 
 ## Ejecucion local
 
@@ -98,5 +112,6 @@ jupyter notebook Proyecto_2P_Riesgo_Inundacion.ipynb
 - **Hover** sobre parroquia: muestra nombre, canton, provincia
 - **Click** sobre parroquia: zoom + popup con riesgo y probabilidades
 - Leyenda y resumen estadistico
-- Formulario de prediccion personalizada
+- Formulario de prediccion personalizada con selector de parroquia
+  (usa datos censales reales si se selecciona una parroquia)
 - Busqueda y listado de parroquias
