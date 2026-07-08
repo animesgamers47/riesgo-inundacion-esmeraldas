@@ -24,3 +24,5 @@ Esmeraldas_CSV_Emigrantes.csv
 session-*.md
 run_nb.py
 run_nb2.py
+*.tex
+generar_informe.py
