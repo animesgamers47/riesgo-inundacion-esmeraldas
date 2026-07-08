@@ -1,5 +1,7 @@
 # Riesgo de Inundacion por Parroquia - Esmeraldas, Ecuador
 
+**Live demo:** [https://riesgo-inundacion.onrender.com](https://riesgo-inundacion.onrender.com)
+
 Clasificacion supervisada del nivel de riesgo de inundacion (Bajo/Medio/Alto) para las
 parroquias de la provincia de Esmeraldas, Ecuador, usando **19 variables**: 6 climaticas/
 geograficas originales + 13 del censo INEC 2022 y MAATE. App Flask con mapa Leaflet
@@ -82,29 +84,33 @@ jupyter notebook Proyecto_2P_Riesgo_Inundacion.ipynb
 
 ## Despliegue en produccion
 
-### PythonAnywhere (recomendado)
+### Render (recomendado)
 
-1. Subir la carpeta `flask_app/` completa via Consola o Web tab (Files)
-2. En Web tab: crear nueva app web manual (Python 3.12, Flask)
-3. WSGI configuration file: apuntar a `wsgi.py`
-4. Static files: `/static/` -> `/home/tu-usuario/flask_app/static/`
-5. En una consola: `pip install -r requirements.txt`
-6. Recargar la app
+URL: [https://riesgo-inundacion.onrender.com](https://riesgo-inundacion.onrender.com)
 
-### Render
+1. Ir a [dashboard.render.com](https://dashboard.render.com) → New Web Service
+2. Conectar GitHub repo `animesgamers47/riesgo-inundacion-esmeraldas`
+3. Configurar:
+   - **Root Directory**: `flask_app`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
+   - **Plan**: Free (Oregon, US West)
+4. Create Web Service
 
-1. Crear nuevo Web Service
-2. Conectar repo de GitHub / subir carpeta
-3. **Build Command**: `pip install -r requirements.txt`
-4. **Start Command**: `gunicorn app:app`
-5. Subir `flask_app/` como raiz del proyecto (o configurar root directory)
+### PythonAnywhere
+
+1. Subir `flask_app/` via Files o git clone
+2. Web tab → crear web app manual (Python 3.12)
+3. WSGI: apuntar a `wsgi.py`
+4. Static: `/static/` → `flask_app/static/`
+5. Consola: `pip install --no-cache-dir -r requirements.txt`
+6. Recargar
 
 ### Railway
 
-1. Crear nuevo proyecto -> Deploy from GitHub
-2. Railway detecta `Procfile` automaticamente
-3. Configurar root directory como `flask_app/`
-4. Build pack: Python
+1. New Project → Deploy from GitHub
+2. Root directory: `flask_app/`
+3. Build pack: Python
 
 ## Funcionalidades de la app web
 
