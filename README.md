@@ -84,33 +84,9 @@ jupyter notebook Proyecto_2P_Riesgo_Inundacion.ipynb
 
 ## Despliegue en produccion
 
-### Render (recomendado)
+### Render
 
 URL: [https://riesgo-inundacion.onrender.com](https://riesgo-inundacion.onrender.com)
-
-1. Ir a [dashboard.render.com](https://dashboard.render.com) → New Web Service
-2. Conectar GitHub repo `animesgamers47/riesgo-inundacion-esmeraldas`
-3. Configurar:
-   - **Root Directory**: `flask_app`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-   - **Plan**: Free (Oregon, US West)
-4. Create Web Service
-
-### PythonAnywhere
-
-1. Subir `flask_app/` via Files o git clone
-2. Web tab → crear web app manual (Python 3.12)
-3. WSGI: apuntar a `wsgi.py`
-4. Static: `/static/` → `flask_app/static/`
-5. Consola: `pip install --no-cache-dir -r requirements.txt`
-6. Recargar
-
-### Railway
-
-1. New Project → Deploy from GitHub
-2. Root directory: `flask_app/`
-3. Build pack: Python
 
 ## Funcionalidades de la app web
 
