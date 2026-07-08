@@ -1,5 +1,6 @@
-import os, json, csv
+import os, json
 import joblib
+import pandas as pd
 import numpy as np
 from flask import Flask, render_template, jsonify, request
 
@@ -25,66 +26,29 @@ INEC_COLS = [
 
 ALL_FEATURE_COLS = FEATURE_COLS + INEC_COLS
 
+df_enriched = pd.read_csv(
+    os.path.join(MODELS_DIR, "dataset_riesgo_inundacion_enriquecido.csv"),
+    encoding="utf-8-sig",
+)
+for c in INEC_COLS:
+    if c in df_enriched.columns:
+        df_enriched[c] = df_enriched[c].fillna(0)
 
-def load_csv(filepath):
-    """Load CSV as list of dicts without pandas dependency."""
-    rows = []
-    with open(filepath, "r", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            rows.append(row)
-    return rows
+parroquia_features = {}
+for (name, canton), group in df_enriched.groupby(["PARROQUIA", "CANTON"]):
+    key = (name.strip().title(), canton.strip().title())
+    parroquia_features[key] = [float(group[c].mean()) for c in ALL_FEATURE_COLS]
 
-
-def get_float(row, col, default=0.0):
-    try:
-        v = row.get(col, default)
-        return float(v) if v != "" else default
-    except (ValueError, TypeError):
-        return default
-
-
-def groupby_mean(rows, group_cols, val_cols):
-    """Group by group_cols and compute mean of val_cols."""
-    sums = {}
-    counts = {}
-    for row in rows:
-        key = tuple(row[c].strip().title() for c in group_cols)
-        if key not in sums:
-            sums[key] = [0.0] * len(val_cols)
-            counts[key] = 0
-        for i, c in enumerate(val_cols):
-            sums[key][i] += get_float(row, c)
-        counts[key] += 1
-    result = {}
-    for key in sums:
-        result[key] = [s / counts[key] for s in sums[key]]
-    return result
-
-
-def col_mean(rows, col):
-    vals = [get_float(r, col) for r in rows]
-    return sum(vals) / len(vals) if vals else 0.0
-
-
-# Cargar dataset enriquecido
-rows_enriched = load_csv(os.path.join(MODELS_DIR, "dataset_riesgo_inundacion_enriquecido.csv"))
-
-# Lookup por parroquia+canton
-parroquia_features = groupby_mean(rows_enriched, ["PARROQUIA", "CANTON"], ALL_FEATURE_COLS)
-
-# INEC lookup solo por nombre de parroquia
 inec_lookup = {}
 for key, vals in parroquia_features.items():
     inec_lookup[key[0]] = vals[len(FEATURE_COLS):]
 
-# INEC promedio global
-inec_global_mean = [col_mean(rows_enriched, c) for c in INEC_COLS]
+inec_global_mean = [float(df_enriched[c].mean()) for c in INEC_COLS]
 
-# Cargar dataset original para fallback de features originales
-rows_orig = load_csv(os.path.join(MODELS_DIR, "dataset_riesgo_inundacion_esmeraldas.csv"))
-orig_means_by_parish = groupby_mean(rows_orig, ["PARROQUIA"], FEATURE_COLS)
-orig_global_means = [col_mean(rows_orig, c) for c in FEATURE_COLS]
+df_orig = pd.read_csv(
+    os.path.join(MODELS_DIR, "dataset_riesgo_inundacion_esmeraldas.csv"),
+    encoding="utf-8-sig",
+)
 
 RIESGO_COLORS = {"Alto": "#e74c3c", "Medio": "#f39c12", "Bajo": "#2ecc71"}
 
@@ -95,15 +59,15 @@ def predecir_riesgo(nombre, canton="", inec_vals=None):
         X = np.array(parroquia_features[key]).reshape(1, -1)
     else:
         nombre_key = nombre.strip().title()
-        orig = orig_means_by_parish.get(
-            (nombre_key,),
-            np.array([orig_global_means])
-        )
-        if isinstance(orig, list):
-            orig = np.array(orig)
+        orig = np.array([
+            df_orig[df_orig["PARROQUIA"].str.strip().str.title() == nombre_key][c].mean()
+            if nombre_key in df_orig["PARROQUIA"].str.strip().str.title().values
+            else df_orig[c].mean()
+            for c in FEATURE_COLS
+        ])
         if inec_vals is None:
             inec_vals = inec_lookup.get(nombre_key, inec_global_mean)
-        X = np.concatenate([orig.flatten(), np.array(inec_vals)]).reshape(1, -1)
+        X = np.concatenate([orig, np.array(inec_vals)]).reshape(1, -1)
 
     pred = model.predict(X)[0]
     riesgo = label_encoder.inverse_transform([pred])[0]
@@ -150,7 +114,6 @@ def predict():
         data.get("densidad", 0),
         data.get("area_urbana", 0),
     ]
-    # Si se especifica parroquia, usar sus datos INEC
     parroquia = data.get("parroquia", "").strip().title()
     if parroquia and parroquia in inec_lookup:
         inec_vals = inec_lookup[parroquia]
