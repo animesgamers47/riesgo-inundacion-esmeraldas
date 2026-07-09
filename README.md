@@ -5,7 +5,7 @@
 Clasificacion supervisada del nivel de riesgo de inundacion (Bajo/Medio/Alto) para las
 parroquias de la provincia de Esmeraldas, Ecuador, usando **19 variables**: 6 climaticas/
 geograficas originales + 13 del censo INEC 2022 y MAATE. App Flask con mapa Leaflet
-desplegable en PythonAnywhere / Render / Railway.
+desplegada en Render.
 
 ## Estructura del proyecto
 
