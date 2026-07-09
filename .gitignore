@@ -27,3 +27,9 @@ run_nb2.py
 *.tex
 generar_informe.py
 generar_notebook.py
+
+# Generated presentation files
+Guia_Exposicion_*.pdf
+Presentacion_Riesgo_Inundacion.pptx
+generar_guias.py
+generar_pptx.py
