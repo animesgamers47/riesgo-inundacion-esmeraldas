@@ -168,50 +168,6 @@
         .proba-labels span { display: flex; align-items: center; gap: 3px; }
         .proba-labels .ldot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
 
-        /* PREDICTION FORM */
-        .pred-section { margin: 12px 0; }
-        .pred-section h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
-        .pred-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-        .pred-field { position: relative; }
-        .pred-field label {
-            display: block; font-size: 10px; font-weight: 600; color: var(--muted);
-            margin-bottom: 2px; text-transform: uppercase; letter-spacing: .3px;
-        }
-        .pred-field input {
-            width: 100%; height: 34px; padding: 0 8px;
-            border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-            font-size: 12px; font-family: inherit;
-            transition: var(--transition); background: var(--bg);
-        }
-        .pred-field input:focus { outline: none; border-color: var(--primary-light); background: white; }
-        .pred-field .unit {
-            position: absolute; right: 8px; bottom: 8px;
-            font-size: 9px; color: var(--muted); font-weight: 500;
-        }
-        .pred-buttons { display: flex; gap: 6px; margin: 8px 0; }
-        .pred-buttons button {
-            flex: 1; height: 34px; border: none; border-radius: var(--radius-sm);
-            font-size: 11px; font-weight: 600; cursor: pointer;
-            transition: var(--transition); font-family: inherit;
-        }
-        .btn-predict {
-            background: var(--primary); color: white;
-        }
-        .btn-predict:hover { background: var(--primary-light); }
-        .btn-preset {
-            background: var(--bg); color: var(--muted); border: 1px solid var(--border) !important;
-        }
-        .btn-preset:hover { background: var(--border); color: var(--text); }
-
-        #pred-result {
-            display: none; margin-top: 8px; padding: 14px;
-            border-radius: var(--radius); text-align: center;
-            animation: fadeSlideIn .3s ease;
-        }
-        #pred-result .pred-label { font-size: 11px; opacity: .7; margin-bottom: 2px; }
-        #pred-result .pred-value { font-size: 24px; font-weight: 800; }
-        #pred-result .pred-probas { font-size: 11px; margin-top: 6px; display: flex; justify-content: center; gap: 12px; }
-
         /* TOAST */
         #toast {
             position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -243,12 +199,10 @@
         @media (max-width: 768px) {
             #main { flex-direction: column; }
             #sidebar { width: 100%; height: 45vh; }
-            .pred-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 480px) {
             #sidebar { height: 50vh; }
             #header h1 { font-size: 14px; }
-            .pred-grid { grid-template-columns: 1fr; }
             #legend-stats { flex-wrap: wrap; }
             .legend-item { min-width: 60px; }
         }
@@ -279,9 +233,6 @@
                 <div class="sidebar-tab active" data-tab="mapa" onclick="switchTab('mapa')">
                     <span class="tab-icon">&#x1F5FA;</span> Mapa
                 </div>
-                <div class="sidebar-tab" data-tab="predecir" onclick="switchTab('predecir')">
-                    <span class="tab-icon">&#x1F52E;</span> Predecir
-                </div>
                 <div class="sidebar-tab" data-tab="listado" onclick="switchTab('listado')">
                     <span class="tab-icon">&#x1F4CB;</span> Listado
                 </div>
@@ -293,58 +244,6 @@
                 <input type="text" id="search" placeholder="Buscar parroquia o cant&oacute;n..." oninput="filterParroquias()">
                 <div id="info-panel"></div>
                 <div id="parroquias-list"></div>
-            </div>
-
-            <!-- TAB: PREDECIR -->
-            <div class="sidebar-content" id="tab-predecir" style="display:none">
-                <div class="pred-section">
-                    <h3>Variables predictoras</h3>
-                    <div class="pred-field" style="grid-column: 1 / -1;">
-                        <label>Parroquia (para datos censales)</label>
-                        <select id="input-parroquia" style="width:100%;height:34px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;padding:0 8px;background:var(--bg)">
-                            <option value="">-- Promedio general --</option>
-                        </select>
-                    </div>
-                    <div class="pred-grid">
-                        <div class="pred-field">
-                            <label>Precipitaci&oacute;n anual</label>
-                            <input type="number" id="input-precip" placeholder="2200" step="10">
-                            <span class="unit">mm</span>
-                        </div>
-                        <div class="pred-field">
-                            <label>Altitud media</label>
-                            <input type="number" id="input-alt" placeholder="15" step="0.5">
-                            <span class="unit">m</span>
-                        </div>
-                        <div class="pred-field">
-                            <label>Pendiente</label>
-                            <input type="number" id="input-pend" placeholder="3" step="0.1">
-                            <span class="unit">%</span>
-                        </div>
-                        <div class="pred-field">
-                            <label>Distancia a agua</label>
-                            <input type="number" id="input-dist" placeholder="1.0" step="0.1">
-                            <span class="unit">km</span>
-                        </div>
-                        <div class="pred-field">
-                            <label>Densidad poblacional</label>
-                            <input type="number" id="input-dens" placeholder="50" step="5">
-                            <span class="unit">hab/km&sup2;</span>
-                        </div>
-                        <div class="pred-field">
-                            <label>&Aacute;rea urbanizada</label>
-                            <input type="number" id="input-urb" placeholder="5" step="0.5">
-                            <span class="unit">%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="pred-buttons">
-                    <button class="btn-preset" onclick="setPreset('rural')">Rural</button>
-                    <button class="btn-preset" onclick="setPreset('urbano')">Urbano</button>
-                    <button class="btn-preset" onclick="setPreset('costero')">Costero</button>
-                    <button class="btn-predict" onclick="predictCustom()">Predecir</button>
-                </div>
-                <div id="pred-result"></div>
             </div>
 
             <!-- TAB: LISTADO -->
@@ -545,71 +444,6 @@ function filterByRisk(risk) {
     var filtered = parroquiasList.filter(function(p) { return p.riesgo === risk; });
     renderParroquiasList(filtered);
     showToast('Mostrando ' + filtered.length + ' parroquias con riesgo ' + risk);
-}
-
-/* PRESETS */
-function setPreset(type) {
-    var vals = {
-        rural: [2100, 25, 4.5, 2.0, 25, 2],
-        urbano: [2200, 12, 2.0, 0.5, 250, 35],
-        costero: [2400, 5, 1.0, 0.2, 80, 8]
-    };
-    var v = vals[type] || vals.rural;
-    document.getElementById('input-precip').value = v[0];
-    document.getElementById('input-alt').value = v[1];
-    document.getElementById('input-pend').value = v[2];
-    document.getElementById('input-dist').value = v[3];
-    document.getElementById('input-dens').value = v[4];
-    document.getElementById('input-urb').value = v[5];
-}
-
-/* LOAD PARISH LIST FOR DROPDOWN */
-fetch('/api/parroquias-list')
-    .then(function(r) { return r.json(); })
-    .then(function(list) {
-        var sel = document.getElementById('input-parroquia');
-        list.forEach(function(p) {
-            var opt = document.createElement('option');
-            opt.value = p.nombre;
-            opt.textContent = p.nombre + ' (' + p.canton + ')';
-            sel.appendChild(opt);
-        });
-    });
-
-/* PREDICT */
-function predictCustom() {
-    var parroquia = document.getElementById('input-parroquia').value;
-    var data = {
-        precipitacion: parseFloat(document.getElementById('input-precip').value) || 0,
-        altitud: parseFloat(document.getElementById('input-alt').value) || 0,
-        pendiente: parseFloat(document.getElementById('input-pend').value) || 0,
-        distancia_agua: parseFloat(document.getElementById('input-dist').value) || 0,
-        densidad: parseFloat(document.getElementById('input-dens').value) || 0,
-        area_urbana: parseFloat(document.getElementById('input-urb').value) || 0
-    };
-    if (parroquia) data.parroquia = parroquia;
-
-    fetch('/api/predict', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(res) {
-        var el = document.getElementById('pred-result');
-        el.style.display = 'block';
-        el.style.background = res.color + '15';
-        el.style.border = '1px solid ' + res.color + '40';
-        el.innerHTML =
-            '<div class="pred-label">Riesgo estimado</div>' +
-            '<div class="pred-value" style="color:' + res.color + '">' + res.riesgo + '</div>' +
-            '<div class="pred-probas">' +
-            '<span style="color:var(--alto)">Alto ' + (res.proba_alto * 100).toFixed(1) + '%</span>' +
-            '<span style="color:var(--medio)">Medio ' + (res.proba_medio * 100).toFixed(1) + '%</span>' +
-            '<span style="color:var(--bajo)">Bajo ' + (res.proba_bajo * 100).toFixed(1) + '%</span>' +
-            '</div>';
-        switchTab('predecir');
-    });
 }
 
 /* INIT */

@@ -105,6 +105,4 @@ URL: [https://riesgo-inundacion.onrender.com](https://riesgo-inundacion.onrender
 - **Hover** sobre parroquia: muestra nombre, canton, provincia
 - **Click** sobre parroquia: zoom + popup con riesgo y probabilidades
 - Leyenda y resumen estadistico
-- Formulario de prediccion personalizada con selector de parroquia
-  (usa datos censales reales si se selecciona una parroquia)
-- Busqueda y listado de parroquias
+- Busqueda y listado interactivo de parroquias

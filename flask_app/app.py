@@ -2,7 +2,7 @@ import os, json
 import joblib
 import pandas as pd
 import numpy as np
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
 
@@ -101,45 +101,6 @@ def get_parroquias():
         props["proba_alto"] = round(float(proba[0]), 3)
 
     return jsonify(geojson)
-
-
-@app.route("/api/predict", methods=["POST"])
-def predict():
-    data = request.get_json()
-    features = [
-        data.get("precipitacion", 0),
-        data.get("altitud", 0),
-        data.get("pendiente", 0),
-        data.get("distancia_agua", 0),
-        data.get("densidad", 0),
-        data.get("area_urbana", 0),
-    ]
-    parroquia = data.get("parroquia", "").strip().title()
-    if parroquia and parroquia in inec_lookup:
-        inec_vals = inec_lookup[parroquia]
-    else:
-        inec_vals = inec_global_mean
-
-    X = np.array(features + inec_vals).reshape(1, -1)
-    pred = model.predict(X)[0]
-    riesgo = label_encoder.inverse_transform([pred])[0]
-    proba = model.predict_proba(X)[0]
-
-    return jsonify({
-        "riesgo": riesgo,
-        "color": RIESGO_COLORS.get(riesgo, "#95a5a6"),
-        "proba_bajo": round(float(proba[1]), 3),
-        "proba_medio": round(float(proba[2]), 3),
-        "proba_alto": round(float(proba[0]), 3),
-    })
-
-
-@app.route("/api/parroquias-list")
-def parroquias_list():
-    return jsonify([
-        {"nombre": k[0], "canton": k[1]}
-        for k in sorted(parroquia_features.keys())
-    ])
 
 
 if __name__ == "__main__":
