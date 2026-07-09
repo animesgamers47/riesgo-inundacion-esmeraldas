@@ -18,12 +18,13 @@ desplegable en PythonAnywhere / Render / Railway.
 │   ├── modelo_riesgo_inundacion_voting_soft.pkl     # Voting Classifier
 │   ├── label_encoder.pkl                            # Label encoder
 │   └── scaler.pkl                                   # Scaler
-├── pipeline_enriquecido.py                          # Pipeline con 19 features + comparativa
-├── integrar_nuevos_csvs.py                          # Agregacion INEC 2022 + MAATE por parroquia
-├── extraer_datos_sngre.py                           # Extraccion de datos SNGRE REST API
-├── construir_dataset_integrado.py                   # Integracion datos reales + sinteticos
-├── descargar_geojson_parroquias.py                  # Descarga GeoJSON con poligonos
-├── generar_dataset_esmeraldas.py                    # Generacion del dataset base
+├── extract/                                         # Scripts de extraccion one-time
+│   ├── extraer_datos_sngre.py                       # Extraccion SNGRE REST API
+│   └── descargar_geojson_parroquias.py              # Descarga GeoJSON con poligonos
+├── build/                                           # Scripts de construccion del dataset
+│   ├── construir_dataset_integrado.py               # Integracion datos reales + sinteticos
+│   ├── integrar_nuevos_csvs.py                      # Agregacion INEC 2022 + MAATE por parroquia
+│   └── generar_dataset_esmeraldas.py                # Generacion del dataset base
 └── flask_app/                                       # App web (autocontenida para deploy)
     ├── app.py                                       # API Flask (19 features + lookup INEC)
     ├── requirements.txt                             # Dependencias
