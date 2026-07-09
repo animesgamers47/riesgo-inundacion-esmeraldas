@@ -10,16 +10,20 @@ desplegable en PythonAnywhere / Render / Railway.
 ## Estructura del proyecto
 
 ```
-├── Proyecto_2P_Riesgo_Inundacion.ipynb              # Notebook principal (19 features)
-├── dataset_riesgo_inundacion_enriquecido.csv        # Dataset enriquecido INEC+MAATE (320x46)
+├── notebook/                                        # Notebook + datasets asociados
+│   ├── Proyecto_2P_Riesgo_Inundacion.ipynb          # Notebook principal (19 features)
+│   ├── dataset_riesgo_inundacion_enriquecido.csv    # Dataset enriquecido INEC+MAATE (320x46)
+│   ├── dataset_riesgo_inundacion_esmeraldas.csv     # Dataset base
+│   ├── modelo_riesgo_inundacion_rf_optimizado.pkl   # Modelo RF optimizado
+│   ├── modelo_riesgo_inundacion_voting_soft.pkl     # Voting Classifier
+│   ├── label_encoder.pkl                            # Label encoder
+│   └── scaler.pkl                                   # Scaler
 ├── pipeline_enriquecido.py                          # Pipeline con 19 features + comparativa
 ├── integrar_nuevos_csvs.py                          # Agregacion INEC 2022 + MAATE por parroquia
-├── generar_notebook.py                              # Generador del notebook .ipynb
 ├── extraer_datos_sngre.py                           # Extraccion de datos SNGRE REST API
 ├── construir_dataset_integrado.py                   # Integracion datos reales + sinteticos
 ├── descargar_geojson_parroquias.py                  # Descarga GeoJSON con poligonos
-├── modelo_riesgo_inundacion_rf_optimizado.pkl       # Modelo RF optimizado (19 features)
-├── label_encoder.pkl                                # Label encoder
+├── generar_dataset_esmeraldas.py                    # Generacion del dataset base
 └── flask_app/                                       # App web (autocontenida para deploy)
     ├── app.py                                       # API Flask (19 features + lookup INEC)
     ├── requirements.txt                             # Dependencias
@@ -79,7 +83,7 @@ python app.py
 ## Notebook
 
 ```bash
-jupyter notebook Proyecto_2P_Riesgo_Inundacion.ipynb
+jupyter notebook notebook/Proyecto_2P_Riesgo_Inundacion.ipynb
 ```
 
 ## Despliegue en produccion
