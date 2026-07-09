@@ -25,6 +25,10 @@ desplegable en PythonAnywhere / Render / Railway.
 │   ├── construir_dataset_integrado.py               # Integracion datos reales + sinteticos
 │   ├── integrar_nuevos_csvs.py                      # Agregacion INEC 2022 + MAATE por parroquia
 │   └── generar_dataset_esmeraldas.py                # Generacion del dataset base
+├── Informe Grupo B.pdf                              # Informe del proyecto (PDF)
+├── Captura de pantalla del hosting.png               # Captura del deploy en Render
+├── resultados_comparativos.csv                       # Comparativa de resultados
+├── requirements.txt                                  # Dependencias generales
 └── flask_app/                                       # App web (autocontenida para deploy)
     ├── app.py                                       # API Flask (19 features + lookup INEC)
     ├── requirements.txt                             # Dependencias
@@ -57,20 +61,22 @@ desplegable en PythonAnywhere / Render / Railway.
 
 ## Modelos
 
-> Resultados con dataset enriquecido (19 features, 320 parroquias)
+> Resultados con dataset real (19 features, 63 parroquias, 320 registros)
 
-| Modelo | Accuracy | F1-Score | CV F1 |
+| Modelo | Accuracy | F1-Score | Recall |
 |---|---|---|---|
-| Random Forest (opt) | 92.71% | 92.68% | 92.81% |
-| Voting Soft | 92.71% | 92.68% | 93.21% |
-| Logistic Regression | 91.67% | 91.61% | 91.41% |
-| SVM (RBF) | 91.67% | 91.60% | 91.98% |
-| Decision Tree | 88.54% | 88.56% | 84.40% |
+| **Decision Tree** | **85.00%** | **84.63%** | **85.00%** |
+| Voting Classifier (Soft) | 80.00% | 80.00% | 80.00% |
+| Random Forest (opt) | 80.00% | 78.63% | 80.00% |
+| SVM (RBF) | 70.00% | 68.89% | 70.00% |
+| Logistic Regression | 65.00% | 65.89% | 65.00% |
 
-Top-3 variables mas importantes:
-1. DISTANCIA_AGUA_KM (32.1%)
-2. PRECIPITACION_ANUAL_MM (16.3%)
-3. DENSIDAD_POBLACIONAL (8.7%)
+Top-3 variables mas importantes (Random Forest):
+1. DISTANCIA_AGUA_KM (23.3%)
+2. PENDIENTE_PCT (15.2%)
+3. PRECIPITACION_ANUAL_MM (14.3%)
+
+> **Metrica prioritaria:** Recall, porque en gestion de riesgo es preferible un falso positivo a un falso negativo.
 
 ## Ejecucion local
 
