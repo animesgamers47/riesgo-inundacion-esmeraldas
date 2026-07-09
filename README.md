@@ -109,4 +109,4 @@ URL: [https://riesgo-inundacion.onrender.com](https://riesgo-inundacion.onrender
 
 ## Video Demostrativo
 
-[Ver video](https://youtu.be/9lfEFa9AHrQ)
+[![Ver video demostrativo](https://img.youtube.com/vi/9lfEFa9AHrQ/0.jpg)](https://youtu.be/9lfEFa9AHrQ)
