@@ -26,3 +26,4 @@ run_nb.py
 run_nb2.py
 *.tex
 generar_informe.py
+generar_notebook.py
