@@ -376,6 +376,7 @@ var geojsonLayer = null;
 var parroquiasList = [];
 var parroquiasFull = [];
 var allStats = {Alto: 0, Medio: 0, Bajo: 0};
+var highlightedLayer = null;
 
 /* TAB SWITCHING */
 function switchTab(tab) {
@@ -403,12 +404,19 @@ function styleFeature(f) {
 
 function highlightFeature(e) {
     var layer = e.target;
+    if (highlightedLayer && highlightedLayer !== layer) {
+        resetHighlight({target: highlightedLayer});
+    }
     layer.setStyle({weight: 3, color: '#1e293b', fillOpacity: 0.85});
     layer.bringToFront();
     showInfoPanel(layer.feature);
+    highlightedLayer = layer;
 }
 
-function resetHighlight(e) { geojsonLayer.resetStyle(e.target); }
+function resetHighlight(e) {
+    geojsonLayer.resetStyle(e.target);
+    if (highlightedLayer === e.target) highlightedLayer = null;
+}
 
 function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds(), {padding: [40, 40]});
