@@ -430,7 +430,7 @@ function popupHTML(props) {
 function onEachFeature(feature, layer) {
     var p = feature.properties;
     layer.bindTooltip(
-        '<b>' + p.PARROQUIA + '</b> &middot; ' + p.CANTON,
+        '<b>' + p.PARROQUIA + '</b> &middot; ' + p.CANTON + ' &middot; ' + p.PROVINCIA,
         {sticky: true, direction: 'top', offset: [0, -4]}
     );
     layer.bindPopup(popupHTML(p), {maxWidth: 260});
